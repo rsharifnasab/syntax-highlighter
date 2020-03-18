@@ -15,6 +15,7 @@
     <dependencies>
 
         <dependency>
+            <!-- junit for unit testing -->
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
@@ -22,9 +23,17 @@
         </dependency>
 
         <dependency>
+            <!-- main library for creating scanner! -->
             <groupId>de.jflex</groupId>
             <artifactId>jflex</artifactId>
             <version>1.8.1</version>
+        </dependency>
+
+        <dependency>
+            <!-- jsoup HTML parser library -->
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
         </dependency>
 
     </dependencies>
@@ -58,6 +67,7 @@
             </plugin>
 
             <plugin>
+                <!-- autogenrate scanner from flex file -->
                 <groupId>de.jflex</groupId>
                 <artifactId>jflex-maven-plugin</artifactId>
                 <version>1.8.1</version>
