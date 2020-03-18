@@ -3,47 +3,7 @@ package syntaxhighlighter;
 
 import java.io.*;
 
-class Symbol {
 
-	public String content;
-	public TokenType tokenType;
-	public int yyline, yycolumn;
-
-	public Symbol( TokenType tokenType, int yyline, int yycolumn, String content ) {
-		this.content = content;
-		this.tokenType = tokenType;
-		this.yyline = yyline;
-		this.yycolumn = yycolumn;
-	}
-
-}
-
-enum TokenType {
-
-	AUTO, DOUBLE,
-	INT, STRUCT,
-	CONST, FLOAT,
-	SHORT, UNSIGNED,
-	BREAK, ELSE,
-	LONG, SWITCH,
-	CONTINUE, FOR,
-	SIGNED, VOID,
-	CASE, ENUM,
-	REGISTER, TYPEDEF,
-	DEFAULT, GOTO,
-	SIZEOF, VOLATILE,
-	CHAR, EXTERN,
-	RETURN, UNION,
-	DO, IF,
-	STATIC, WHILE,
-	LESSTHAN, MORETHAN,
-	IDENTIFIER, INTEGERLITERAL,
-	FLOATLITERAL, ENTER, TAB,
-	SPECIAL_CHARACTER, STRING,
-	COMMENT, NORMAL_CHARACTER,
-	NOTHING, EOF;
-
-}
 
 
 /***** options and macros (declerations) *****/
@@ -60,9 +20,9 @@ enum TokenType {
 %line // line counting: current line can be accesssed with the variable yyline
 %column // column counting: same as line!
 
-%type Symbol
 
 %function next // name of function (instead of yylex)
+%type Symbol //define output of out next() function
 
 %state STRING, CHARACTER
 
@@ -71,28 +31,31 @@ InputCharacter = [^\r\n] // evething except line terminator is input character!
 
 WhiteSpace = {LineTerminator} | [ \t\f] // tab and space and form feeds are WhiteSpace
 
+/****** comments *******/
 CStyleComment = "/*"~"*/"
 OneLineComment = "//" {InputCharacter}* {LineTerminator}
-
 Comment = {CStyleComment}|{OneLineComment}
+
 
 Letter = [A-Za-z]
 Digit = [0-9]
 Underscore = "_"
-
 Identifier = {Letter} ({Letter}|{Digit}|{Underscore})*
 
-Zero = 0
-Octal = 0[0-7]+
-Decimal = [1-9][0-9]*
-HexaDecimal = [0][xX][0-9a-fA-F]+;
 
-IntegerNumbers = {Zero}|{Octal}|{Decimal}|{HexaDecimal}
+/****** numbers *******/
+Sign = (\+|\-)?
+DecimalInt = {Sign}[0-9]+
+DecimalLong = {DecimalInt}[L]
+HexaDecimal = {Sign}[0][xX][0-9a-fA-F]+
+IntegerNumber ={DecimalInt}|{DecimalLong}|{HexaDecimal}
 
-NormalFloat = ( ({Digit}+\.{Digit}*) | ({Digit}*\.{Digit}+) )
-ScientificFloat = ( {NormalFloat}|{Zero}|{Decimal} ) "e" ( \+|\- )? {Digit}+
+FloatNumber = {Sign}(\.{Digit}+) | ({Digit}+\.) | ({Digit}+\.{Digit}+)
+RealNumber = {FloatNumber} | {FloatNumber}[F]
 
-FloatNumbers = NormalFloat | ScientificFloat
+ScientificFloat = ({FloatNumber}|{DecimalInt})[eE]{Sign}{DecimalInt} //todo space
+
+/**** string and characters *********/
 
 StringCharacter = [^\n\r\t\v\b\f\a\?\0\\]
 SingleCharacter = [^\n\r\t\v\b\f\a\?\0\\]
@@ -106,51 +69,73 @@ NormalCharacter = "'" {SingleCharacter} "'"
 <YYINITIAL> {
 
 	/* keywords */
-	"auto"          { return new Symbol( TokenType.AUTO, yyline, yycolumn, "auto" ); }
-	"double"        { return new Symbol( TokenType.DOUBLE, yyline, yycolumn, "double" ); }
-	"int"           { return new Symbol( TokenType.INT, yyline, yycolumn, "int" ); }
-	"struct"        { return new Symbol( TokenType.STRUCT, yyline, yycolumn, "struct" ); }
-	"const"         { return new Symbol( TokenType.CONST, yyline, yycolumn, "const" ); }
-	"float"         { return new Symbol( TokenType.FLOAT, yyline, yycolumn, "float" ); }
-	"short"         { return new Symbol( TokenType.SHORT, yyline, yycolumn, "short" ); }
-	"unsigned"      { return new Symbol( TokenType.UNSIGNED, yyline, yycolumn, "unsigned" ); }
-	"break"         { return new Symbol( TokenType.BREAK, yyline, yycolumn, "break" ); }
-	"else"          { return new Symbol( TokenType.ELSE, yyline, yycolumn, "else" ); }
-	"long"          { return new Symbol( TokenType.LONG, yyline, yycolumn, "long" ); }
-	"switch"        { return new Symbol( TokenType.SWITCH, yyline, yycolumn, "switch" ); }
-	"continue"      { return new Symbol( TokenType.CONTINUE, yyline, yycolumn, "continue" ); }
-	"for"           { return new Symbol( TokenType.FOR, yyline, yycolumn, "for" ); }
-	"signed"        { return new Symbol( TokenType.SIGNED, yyline, yycolumn, "signed" ); }
-	"void"          { return new Symbol( TokenType.VOID, yyline, yycolumn, "void" ); }
-	"case"          { return new Symbol( TokenType.CASE, yyline, yycolumn, "case" ); }
-	"enum"          { return new Symbol( TokenType.ENUM, yyline, yycolumn, "enum" ); }
-	"register"      { return new Symbol( TokenType.REGISTER, yyline, yycolumn, "register" ); }
-	"typedef"       { return new Symbol( TokenType.TYPEDEF, yyline, yycolumn, "typedef" ); }
-	"default"       { return new Symbol( TokenType.DEFAULT, yyline, yycolumn, "default" ); }
-	"goto"          { return new Symbol( TokenType.GOTO, yyline, yycolumn, "goto" ); }
-	"sizeof"        { return new Symbol( TokenType.SIZEOF, yyline, yycolumn, "sizeof" ); }
-	"volatile"      { return new Symbol( TokenType.VOLATILE, yyline, yycolumn, "volatile" ); }
-	"char"          { return new Symbol( TokenType.CHAR, yyline, yycolumn, "char" ); }
-	"extern"        { return new Symbol( TokenType.EXTERN, yyline, yycolumn, "extern" ); }
-	"return"        { return new Symbol( TokenType.RETURN, yyline, yycolumn, "return" ); }
-	"union"         { return new Symbol( TokenType.UNION, yyline, yycolumn, "union" ); }
-	"do"            { return new Symbol( TokenType.DO, yyline, yycolumn, "do" ); }
-	"if"            { return new Symbol( TokenType.IF, yyline, yycolumn, "if" ); }
-	"static"        { return new Symbol( TokenType.STATIC, yyline, yycolumn, "static" ); }
-	"while"         { return new Symbol( TokenType.WHILE, yyline, yycolumn, "while" ); }
-	"<"             { return new Symbol( TokenType.LESSTHAN, yyline, yycolumn, "lessthan" ); }
-	">"             { return new Symbol( TokenType.MORETHAN, yyline, yycolumn, "morethan" ); }
+	"int"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"if"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"short"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"else"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"long"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"switch"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"float"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"case"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"double"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"default"    { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"char"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"auto"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"string"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"volatile"   { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"const"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"static"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"for"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"goto"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"foreach"    { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"signed"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"while"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"bool"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"do"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"void"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"in"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"return"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 
-	{Identifier}    { return new Symbol( TokenType.IDENTIFIER, yyline, yycolumn, yytext() ); }
+ 	"break"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"record"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"continue"   { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"new"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"until"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"sizeof"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"function"   { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"do"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"println"    { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"true"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"false"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 
-	{IntegerNumbers}    { return new Symbol( TokenType.INTEGERLITERAL, yyline, yycolumn, yytext() ); }
+	"<"          { return new Symbol( yytext(), TokenType.OTHER, yyline, yycolumn ); }
+	">"          { return new Symbol( yytext(), TokenType.OTHER, yyline, yycolumn ); }
 
-	{NormalFloat}  { return new Symbol( TokenType.FLOATLITERAL, yyline, yycolumn, yytext() ); }
-	{ScientificFloat}   { return new Symbol( TokenType.FLOATLITERAL, yyline, yycolumn, yytext() ); }
+	{Identifier} { return new Symbol( yytext(), TokenType.IDENTIFIER, yyline, yycolumn); }
 
-	{Comment}       { return new Symbol( TokenType.COMMENT, yyline, yycolumn, yytext() ); }
+/*
+Sign = (\+|\-)?
+DecimalInt = {Sign}[0-9]+
+DecimalLong = {DecimalInt}[L]
+HexaDecimal = {Sign}[0][xX][0-9a-fA-F]+
+IntegerNumber ={DecimalInt}|{DecimalLong}|{HexaDecimal}
 
-	"\t"           { return new Symbol( TokenType.TAB, yyline, yycolumn, "\t" ); }
+FloatNumber = {Sign}(\.{Digit}+) | ({Digit}+\.) | ({Digit}+\.{Digit}+)
+RealNumber = {FloatNumber} | {FloatNumber}[F]
+
+ScientificFloat = ({FloatNumber}|{DecimalInt})[eE]{Sign}{DecimalInt} //todo space
+
+*/
+	{IntegerNumber} { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+
+	{RealNumber}  { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+
+	{ScientificFloat}  { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+
+
+	{Comment}       { return new Symbol( yytext(), TokenType.COMMENT, yyline, yycolumn ); }
+
+	"\t"           { return new Symbol( yytext(), TokenType.TAB, yyline, yycolumn ); }
 
 	"\""              { yybegin( STRING ); return new Symbol( TokenType.STRING, yyline, yycolumn, yytext() ); }
 
@@ -169,7 +154,7 @@ NormalCharacter = "'" {SingleCharacter} "'"
 
 	"\""          { yybegin( YYINITIAL ); return new Symbol( TokenType.STRING, yyline, yycolumn, yytext() ); }
 
-//	{StringCharacter}+      { return new Symbol( TokenType.STRING, yyline, yycolumn, yytext() );  }
+	//	{StringCharacter}+      { return new Symbol( TokenType.STRING, yyline, yycolumn, yytext() );  }
 
 	"\\n"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\n" ); }
 	"\\t"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\t" ); }
