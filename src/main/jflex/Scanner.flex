@@ -51,12 +51,12 @@ enum TokenType {
 
 %public // class is public, why? i is good practice!
 
-%line
-%column
+%class MyScanner //name of output class
 
-%class MyScanner
+%unicode //input file use the last version of unicode!
 
-%unicode
+%line // line counting: current line can be accesssed with the variable yyline
+%column // column counting: same as line!
 
 %type Symbol
 

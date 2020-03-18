@@ -38,7 +38,7 @@ public class App {
       for (Element paragraph : paragraphs) {
             System.out.println(paragraph.text());
       }
-  
+
 
 		ArgumentParser argParser = new ArgumentParser(args);
 		FileReader input = argParser.getFileReader();
@@ -55,7 +55,7 @@ public class App {
 
 		MyScanner yylex = new MyScanner( input );
 
-		for ( Symbol current = yylex.next(); current.tokenType != TokenType.EOF; current = yylex.next() ){
+		for ( Symbol current = yylex.next(); !yylex.yyatEOF(); current = yylex.next() ){
 			TokenType token = current.tokenType;
 			if ( token == TokenType.ENTER )
 				output.write( "<br>\n" );
@@ -85,8 +85,8 @@ public class App {
 			else
 				output.write( current.content );
 		}
-
 		printEndOfFile(output);
+		yylex.yyclose();
 	}
 
 	public static String commentToHTMLString(String s ) throws IOException {
