@@ -54,6 +54,7 @@ public class App {
 		printStartOfFile(argParser.getJustName(),output);
 
 		MyScanner yylex = new MyScanner( input );
+    
 /*
 		Symbol current;
 		for (current = yylex.next(); !yylex.yyatEOF(); current = yylex.next() ){

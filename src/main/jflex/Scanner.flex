@@ -5,9 +5,8 @@ import java.io.*;
 
 
 
+%% /* * * * * options and macros (declerations) * * * * * * * */
 
-/***** options and macros (declerations) *****/
-%%
 
 %class MyScanner //name of output class
 
@@ -24,14 +23,15 @@ import java.io.*;
 %function next // name of function (instead of yylex)
 %type Symbol //define output of out next() function
 
-%state STRING, CHARACTER
+%state STRING
+%state CHARACTER 
 
 LineTerminator = \r|\n|\r\n // support linux line ending and windows line ending
 InputCharacter = [^\r\n] // evething except line terminator is input character!
 
 WhiteSpace = {LineTerminator} | [ \t\f] // tab and space and form feeds are WhiteSpace
 
-/****** comments *******/
+/*   *   *   *   *  *  comments  *   *   *   *    *   *  */
 CStyleComment = "/*"~"*/"
 OneLineComment = "//" {InputCharacter}* {LineTerminator}
 Comment = {CStyleComment}|{OneLineComment}
@@ -40,7 +40,7 @@ Comment = {CStyleComment}|{OneLineComment}
 Letter = [A-Za-z]
 Digit = [0-9]
 Underscore = "_"
-Identifier = {Letter} ({Letter}|{Digit}|{Underscore})*
+Identifier = {Underscore}* {Letter} ({Letter}|{Digit}|{Underscore})*
 
 
 /****** numbers *******/
@@ -50,106 +50,93 @@ DecimalLong = {DecimalInt}[L]
 HexaDecimal = {Sign}[0][xX][0-9a-fA-F]+
 IntegerNumber ={DecimalInt}|{DecimalLong}|{HexaDecimal}
 
-FloatNumber = {Sign}(\.{Digit}+) | ({Digit}+\.) | ({Digit}+\.{Digit}+)
+FloatNumber = {Sign}( (\.{Digit}+) | ({Digit}+\.) | ({Digit}+\.{Digit}+) )
 RealNumber = {FloatNumber} | {FloatNumber}[F]
 
 ScientificFloat = ({FloatNumber}|{DecimalInt})[eE]{Sign}{DecimalInt} //todo space
 
-/**** string and characters *********/
+/* * * *  string and characters * * * * * */
 
-StringCharacter = [^\n\r\t\v\b\f\a\?\0\\]
 SingleCharacter = [^\n\r\t\v\b\f\a\?\0\\]
 
 NormalCharacter = "'" {SingleCharacter} "'"
 
 
-/******** lexical rules ***********/
-%%
 
-<YYINITIAL> {
+%%  /* * * * * * * * lexical rules * * * * * ** * * * */
+
+<YYINITIAL> {  // state e avvalie ke tush hastim
 
 	/* keywords */
-	"int"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"if"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"short"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"else"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"long"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"switch"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"float"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"case"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"int"             { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"if"               { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"short"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"else"          { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"long"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"switch"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"float"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"case"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 	"double"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 	"default"    { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"char"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"auto"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"string"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"volatile"   { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"const"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"static"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"for"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"goto"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"foreach"    { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"char"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"auto"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"string"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"volatile"    { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"const"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"static"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"for"           { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"goto"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"foreach"   { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 	"signed"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"while"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"bool"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"do"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"void"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"in"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"return"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"while"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"bool"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"do"           { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"void"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"in"            { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"return"    { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 
- 	"break"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"record"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+ 	"break"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"record"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 	"continue"   { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"new"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"until"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"sizeof"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"new"           { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"until"          { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"sizeof"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 	"function"   { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"do"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"println"    { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"true"       { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-	"false"      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"do"             { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"println"     { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"true"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	"false"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 
 	"<"          { return new Symbol( yytext(), TokenType.OTHER, yyline, yycolumn ); }
 	">"          { return new Symbol( yytext(), TokenType.OTHER, yyline, yycolumn ); }
 
-	{Identifier} { return new Symbol( yytext(), TokenType.IDENTIFIER, yyline, yycolumn); }
+	{Identifier}             { return new Symbol( yytext(), TokenType.IDENTIFIER, yyline, yycolumn); }
 
-/*
-Sign = (\+|\-)?
-DecimalInt = {Sign}[0-9]+
-DecimalLong = {DecimalInt}[L]
-HexaDecimal = {Sign}[0][xX][0-9a-fA-F]+
-IntegerNumber ={DecimalInt}|{DecimalLong}|{HexaDecimal}
-
-FloatNumber = {Sign}(\.{Digit}+) | ({Digit}+\.) | ({Digit}+\.{Digit}+)
-RealNumber = {FloatNumber} | {FloatNumber}[F]
-
-ScientificFloat = ({FloatNumber}|{DecimalInt})[eE]{Sign}{DecimalInt} //todo space
-
-*/
 	{IntegerNumber} { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 
-	{RealNumber}  { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	{RealNumber}      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 
-	{ScientificFloat}  { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	{ScientificFloat}    { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 
+	{Comment}          { return new Symbol( yytext(), TokenType.COMMENT, yyline, yycolumn ); }
 
-	{Comment}       { return new Symbol( yytext(), TokenType.COMMENT, yyline, yycolumn ); }
+	"\t"                        { return new Symbol( yytext(), TokenType.TAB, yyline, yycolumn ); }
+    
+    {LineTerminator}    {return new Symbol( "\n", TokenType.ENTER, yyline, yycolumn ); }
 
-	"\t"           { return new Symbol( yytext(), TokenType.TAB, yyline, yycolumn ); }
+    /* jump to another state: String */
+	"\""                      { yybegin( STRING ); return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
-	"\""              { yybegin( STRING ); return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
+	/* jump to another state: character */
+	"'"                     { yybegin( CHARACTER ); return new Symbol( "'", TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
-	//{NormalCharacter}   { return new Symbol( TokenType.NORMAL_CHARACTER, yyline, yycolumn, yytext() ); }
-	"'"             { yybegin( CHARACTER ); return new Symbol( "'", TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
-
-	{LineTerminator}    {return new Symbol( "\n", TokenType.ENTER, yyline, yycolumn ); }
-
+	
 	[^]             { return new Symbol( yytext(), TokenType.NOTHING, yyline, yycolumn ); }
 
 	//<<EOF>>
-
 }
 
+/* * * * * * * *  * * * State : S T R I N G * * * * * * * */
 <STRING> {
 
 	"\""          { yybegin( YYINITIAL ); return new Symbol(  yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
@@ -174,9 +161,10 @@ ScientificFloat = ({FloatNumber}|{DecimalInt})[eE]{Sign}{DecimalInt} //todo spac
 
 }
 
+/* * * * * * * *  * * * State : C H A RA C T E R * * * * * * * */
 <CHARACTER> {
 
-	"\\n"\'     { yybegin( YYINITIAL ); return new Symbol( "\\n'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+    "\\n" \'     { yybegin( YYINITIAL ); return new Symbol( "\\n'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
 	"\\t"\'     { yybegin( YYINITIAL ); return new Symbol( "\\t'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
 	"\\v"\'     { yybegin( YYINITIAL ); return new Symbol( "\\v'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
 	"\\b"\'     { yybegin( YYINITIAL ); return new Symbol( "\\b'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
