@@ -1,5 +1,8 @@
 package syntaxhighlighter;
 import java.io.*;
+import org.jsoup.*;
+import org.jsoup.nodes.*;
+import org.jsoup.select.*;
 
 public class App {
 
@@ -24,9 +27,29 @@ public class App {
 	}
 
 	public static void main(String[] args) throws IOException {
+
+
+      String html = "<html><head><title>Sample Title</title></head>"
+         + "<body><p>Sample Content</p></body></html>";
+		 
+      Document document = Jsoup.parse(html);
+      System.out.println(document.title());
+      Elements paragraphs = document.getElementsByTag("p");
+      for (Element paragraph : paragraphs) {
+            System.out.println(paragraph.text());
+      }
+  		System.exit(1);
+
 		ArgumentParser argParser = new ArgumentParser(args);
 		FileReader input = argParser.getFileReader();
 		FileWriter output = argParser.getOutFileWriter();
+
+
+		Document doc = Jsoup.parse("<html></html>");
+		doc.body().addClass("body-styles-cls");
+		doc.body().appendElement("div");
+		System.out.println(doc.toString());
+
 
 		printStartOfFile(argParser.getJustName(),output);
 
