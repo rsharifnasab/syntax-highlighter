@@ -1,5 +1,7 @@
 package syntaxhighlighter;
 
+import java.io.*;
+
 /**
 	some utilities for working with files
 **/
@@ -12,7 +14,7 @@ public class FilesUtil{
 	**/
 	public static FileStatus getFileState(String fileName){
 
-		java.io.File f = new java.io.File(fileName);
+		File f = new File(fileName);
 
 		if(f.isDirectory())
 			return FileStatus.IS_DIR;
@@ -32,9 +34,9 @@ public class FilesUtil{
 	}
 
 	/**
-		get all context of file as string with given java.io.File
+		get all context of file as string with given File
 	**/
-	public static String readFile(java.io.File file){
+	public static String readFile(File file){
 		if(file == null) return null;
 
 		FileStatus state = getFileState( file.getAbsolutePath() );
@@ -57,15 +59,15 @@ public class FilesUtil{
 		read all data from the file with string address
 	**/
 	public static String readFile(String address){
-		return readFile( new java.io.File(address) );
+		return readFile( new File(address) );
 	}
 
 	/**
-		wirte specified String to the file with java.io.File input
+		wirte specified String to the file with File input
 	*/
-	public static void writeToFile(String text,java.io.File address){
+	public static void writeToFile(String text,File address){
 		try {
-			java.io.PrintWriter writer = new java.io.PrintWriter(address, "UTF-8");
+			PrintWriter writer = new PrintWriter(address, "UTF-8");
 			writer.println(text);
 			writer.close();
 		} catch(Exception e) {
@@ -73,12 +75,12 @@ public class FilesUtil{
 		}
 	}
 
-	public static java.io.FileReader getFileReader(String address){
+	public static FileReader getFileReader(String address){
 		FileStatus status = FilesUtil.getFileState(address);
 		switch (status){
 			case WRITABLE:
 				try{
-					return new java.io.FileReader(address);
+					return new FileReader(address);
 				} catch (Exception e){
 					TerminalUtil.PError("cannot open fileReader");
 				}
@@ -95,6 +97,30 @@ public class FilesUtil{
 		throw new RuntimeException("should not reach here!, probalby bad FileStatus enum");
 
 	}
+
+	public static FileWriter getFileWriter(String address){
+		FileStatus status = FilesUtil.getFileState(address);
+		switch (status){
+			case WRITABLE:
+			case NOT_EXISTS:
+				try{
+					return new FileWriter(address);
+				} catch (Exception e){
+					TerminalUtil.PError("cannot open FileWriter");
+				}
+
+			case IS_DIR:
+				TerminalUtil.PError("error: target is directory: "+address);
+				break;
+
+			case NOT_OK:
+				TerminalUtil.PError("error: cant write to output file: "+address);
+				break;
+		}
+		throw new RuntimeException("should not reach here!, probalby bad FileStatus enum");
+
+	}
+
 
 	private FilesUtil() {}
 

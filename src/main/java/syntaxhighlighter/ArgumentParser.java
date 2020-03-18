@@ -31,4 +31,16 @@ public class ArgumentParser{
 		return FilesUtil.getFileReader(this.args[0]);
 	}
 
+	public String getOutputFileName(){
+		String inpFile = args[0];
+		int lastDot = inpFile.lastIndexOf('.');
+		return inpFile.substring(0, lastDot) + ".html";
+	}
+
+	public java.io.FileWriter getOutFileWriter(){
+		String outfile = getOutputFileName();
+		TerminalUtil.print("generating output to " + outfile, "yellow");
+		return FilesUtil.getFileWriter(outfile);
+	}
+
 }
