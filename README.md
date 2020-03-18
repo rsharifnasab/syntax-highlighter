@@ -11,3 +11,9 @@
 + to compile : execute `mvn clean package` on terminal
 + and to run : `java -jar target/*.jar someTextFile.cpp`
  commands!
+
+### TODO
++ unit test!
++ edit scanner jflex
+
++ write DFA on paper
