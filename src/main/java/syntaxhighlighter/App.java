@@ -5,34 +5,40 @@ public class App {
 
 	final static String TAB = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
+	private static void printStartOfFile(String title,FileWriter output) throws IOException{
+		output.write( "<!DOCTYPE html>\n" );
+		output.write( "<html>\n" );
+		output.write( "  <head>\n" );
+		output.write( "      <title>" + title + "</title>\n" );
+		output.write( "  </head>\n" );
+		output.write( "  <body>\n" );
+		output.write( "     <p>" );
+	}
+
+	private static void printEndOfFile(FileWriter output) throws IOException{
+		output.write( "    </p>\n" );
+		output.write( "  </body>\n" );
+		output.write( "</html>\n");
+		output.flush();
+		output.close();
+	}
+
 	public static void main(String[] args) throws IOException {
 		ArgumentParser argParser = new ArgumentParser(args);
 		FileReader input = argParser.getFileReader();
 		FileWriter output = argParser.getOutFileWriter();
 
-		String outputFile = args[0].split("\\.")[0] + ".html";
-
-
-		output.write( "<!DOCTYPE html>\n" );
-		output.write( "<html>\n" );
-
-		output.write( "<head>\n" );
-		output.write( "<title>" + args[0] + "</title>\n" );
-		//output.write( "<style>p.indent{ padding-left: 1.8em }</style>\n" );
-		output.write( "</head>\n" );
-
-		output.write( "<body>\n" );
-
-		output.write( "<p>" );
+		printStartOfFile(argParser.getJustName(),output);
 
 		MyScanner yylex = new MyScanner( input );
+
 		for ( Symbol current = yylex.next(); current.tokenType != TokenType.EOF; current = yylex.next() ){
 			TokenType token = current.tokenType;
 			if ( token == TokenType.ENTER )
-				output.write( "<br>" );
+				output.write( "<br>\n" );
 			else if ( token == TokenType.TAB )
-				output.write( TAB );
-				//output.write( "<span class=\"indent\"></span>" );
+			//	output.write( TAB );
+				output.write( "<span class=\"indent\"></span>" );
 			else if ( token == TokenType.LESSTHAN )
 				output.write( "&lt;" );
 			else if ( token == TokenType.MORETHAN )
@@ -57,11 +63,7 @@ public class App {
 				output.write( current.content );
 		}
 
-		output.write( "</p>\n</body>\n</html>\n" );
-		output.flush();
-
-		output.close();
-
+		printEndOfFile(output);
 	}
 
 	public static String commentToHTMLString(String s ) throws IOException {

@@ -31,6 +31,10 @@ public class ArgumentParser{
 		return FilesUtil.getFileReader(this.args[0]);
 	}
 
+	public String getJustName(){
+		return FilesUtil.getJustName(this.args[0]);
+	}
+
 	public String getOutputFileName(){
 		String inpFile = args[0];
 		int lastDot = inpFile.lastIndexOf('.');

@@ -25,6 +25,10 @@ public class FilesUtil{
 		return FileStatus.NOT_OK;
 	}
 
+	public static String getJustName(String filename){
+		return new File(filename).getName();
+	}
+
 	/**
 		check if a file is writeble (and we can save it )
 		or no
