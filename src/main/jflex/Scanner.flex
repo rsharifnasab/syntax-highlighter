@@ -46,12 +46,15 @@ enum TokenType {
 }
 
 
-/***** options and macros *****/
+/***** options and macros (declerations) *****/
 %%
 
-%public // class is public, why? i is good practice!
-
 %class MyScanner //name of output class
+
+%public // class is public, why? accessible out of package!
+%final // class is final, why anyone should inherit an autogenrated class?
+
+
 
 %unicode //input file use the last version of unicode!
 
@@ -64,15 +67,15 @@ enum TokenType {
 
 %state STRING, CHARACTER
 
-LineTerminator = \r|\n|\r\n
-InputCharacter = [^\r\n]
+LineTerminator = \r|\n|\r\n // support linux line ending and windows line ending
+InputCharacter = [^\r\n] // evething except line terminator is input character!
 
-WhiteSpace = {LineTerminator} | [ \t\f]
+WhiteSpace = {LineTerminator} | [ \t\f] // tab and space and form feeds are WhiteSpace
 
-TraditionalComment = "/*"~"*/"
-InLineComment = "//" {InputCharacter}* {LineTerminator}
+CStyleComment = "/*"~"*/"
+OneLineComment = "//" {InputCharacter}* {LineTerminator}
 
-Comment = {TraditionalComment}|{InLineComment}
+Comment = {CStyleComment}|{OneLineComment}
 
 Letter = [A-Za-z]
 Digit = [0-9]
@@ -97,6 +100,8 @@ SingleCharacter = [^\n\r\t\v\b\f\a\?\0\\]
 
 NormalCharacter = "'" {SingleCharacter} "'"
 
+
+/******** lexical rules ***********/
 %%
 
 <YYINITIAL> {
