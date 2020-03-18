@@ -55,7 +55,6 @@ enum TokenType {
 %final // class is final, why anyone should inherit an autogenrated class?
 
 
-
 %unicode //input file use the last version of unicode!
 
 %line // line counting: current line can be accesssed with the variable yyline
@@ -63,7 +62,7 @@ enum TokenType {
 
 %type Symbol
 
-%function next
+%function next // name of function (instead of yylex)
 
 %state STRING, CHARACTER
 
