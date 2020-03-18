@@ -24,7 +24,7 @@ int main(){
     /* long literals */
     long myFirst_1long_ = 1234567L;
     signed long My2ndLong = -45L
-    long const b_2 = +1.2;
+    long const b_2 = +1 .2;
     
     /**** float literals ***/
     float fF1 = 1.2F;
@@ -58,10 +58,22 @@ int main(){
     double d2 = +.2;
     double d3 = -10.2;// todo
     
+ 	break
+ 	record
+ 	continue
+ 	new
+ 	until
+ 	sizeof
+ 	function
+ 	do
+    println
+    true
+    false
 	return 0;
 }
 
-        // / characters /*
+        // / characters 
+        /* */
     const char c1 = 'a';
     default char c2 = '\t';
     static char c2 = '\n';

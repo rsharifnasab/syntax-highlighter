@@ -53,7 +53,7 @@ IntegerNumber ={DecimalInt}|{DecimalLong}|{HexaDecimal}
 Ee = (e|E)
 Num = {FloatNumber}|{DecimalInt}
 FloatNumber = {Sign}(\.{Digit}+) | {Sign}({Digit}+\.) |{Sign}({Digit}+\.{Digit}+)
-ScientificFloat = {Num}{Ee}{Sign}{DecimalInt} //todo space
+ScientificFloat = {Num}{Ee}{Sign}{DecimalInt} // TODO
 
 RealNumber = {FloatNumber} | {FloatNumber}[F] | ScientificFloat
 
@@ -62,9 +62,9 @@ RealNumber = {FloatNumber} | {FloatNumber}[F] | ScientificFloat
 /* * * *  string and characters * * * * * */
 
 SingleCharacter = [^\n\r\t\v\b\f\a\?\0\\]
-
-NormalCharacter = "'" {SingleCharacter} "'"
-
+SingleQ = '\''
+NormalCharacter = {SingleQ}{SingleCharacter}{SingleQ}
+//todo
 
 
 %%  /* * * * * * * * lexical rules * * * * * ** * * * */
@@ -129,8 +129,10 @@ NormalCharacter = "'" {SingleCharacter} "'"
     /* jump to another state: String */
 	"\""                      { yybegin( STRING ); return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
+	{NormalCharacter}  {return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
+	
 	/* jump to another state: character */
-	"'"                     { yybegin( CHARACTER ); return new Symbol( "'", TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
+	// "'"                     { yybegin( CHARACTER ); return new Symbol( "'", TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
 	
 	[^]             { return new Symbol( yytext(), TokenType.NOTHING, yyline, yycolumn ); }
