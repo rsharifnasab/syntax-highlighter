@@ -46,5 +46,6 @@ enum TokenType {
 
     ENTER,
     TAB,
-	EOF
+	EOF,
+	NOTHING,
 }

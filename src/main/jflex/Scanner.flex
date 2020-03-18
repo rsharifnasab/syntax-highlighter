@@ -137,14 +137,14 @@ ScientificFloat = ({FloatNumber}|{DecimalInt})[eE]{Sign}{DecimalInt} //todo spac
 
 	"\t"           { return new Symbol( yytext(), TokenType.TAB, yyline, yycolumn ); }
 
-	"\""              { yybegin( STRING ); return new Symbol( TokenType.STRING, yyline, yycolumn, yytext() ); }
+	"\""              { yybegin( STRING ); return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
 	//{NormalCharacter}   { return new Symbol( TokenType.NORMAL_CHARACTER, yyline, yycolumn, yytext() ); }
-	"'"             { yybegin( CHARACTER ); return new Symbol( TokenType.NORMAL_CHARACTER, yyline, yycolumn, "'" ); }
+	"'"             { yybegin( CHARACTER ); return new Symbol( "'", TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
-	{LineTerminator}    {return new Symbol( TokenType.ENTER, yyline, yycolumn, "\n" ); }
+	{LineTerminator}    {return new Symbol( "\n", TokenType.ENTER, yyline, yycolumn ); }
 
-	[^]             { return new Symbol( TokenType.NOTHING, yyline, yycolumn, yytext() ); }
+	[^]             { return new Symbol( yytext(), TokenType.NOTHING, yyline, yycolumn ); }
 
 	//<<EOF>>
 
@@ -152,46 +152,45 @@ ScientificFloat = ({FloatNumber}|{DecimalInt})[eE]{Sign}{DecimalInt} //todo spac
 
 <STRING> {
 
-	"\""          { yybegin( YYINITIAL ); return new Symbol( TokenType.STRING, yyline, yycolumn, yytext() ); }
+	"\""          { yybegin( YYINITIAL ); return new Symbol(  yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
 	//	{StringCharacter}+      { return new Symbol( TokenType.STRING, yyline, yycolumn, yytext() );  }
 
-	"\\n"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\n" ); }
-	"\\t"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\t" ); }
-	"\\v"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\v" ); }
-	"\\b"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\b" ); }
-	"\\r"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\r" ); }
-	"\\f"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\f" ); }
-	"\\a"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\a" ); }
-	"\\\\"      { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\\\" ); }
-	"\\?"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\?" ); }
-	"\\'"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\'" ); }
-	"\\\""      { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\\"" ); }
-	"\\0"       { return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\0" ); }
+	"\\n"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\t"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\v"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\b"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\r"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\f"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\a"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\\\"      { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\?"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\'"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\\""      { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\0"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
 
-	.           { return new Symbol( TokenType.STRING, yyline, yycolumn, yytext() ); }
+	.           { return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
 
 }
 
 <CHARACTER> {
 
-	"\\n"\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\n'" ); }
-	"\\t"\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\t'" ); }
-	"\\v"\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\v'" ); }
-	"\\b"\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\b'" ); }
-	"\\r"\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\r'" ); }
-	"\\f"\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\f'" ); }
-	"\\a"\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\a'" ); }
-	"\\\\"\'    { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\\\'" ); }
-	"\\?"\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\?'" ); }
-	"\\'"\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\''" ); }
-	"\\\""\'    { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\\"'" ); }
-	"\\0"\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.SPECIAL_CHARACTER, yyline, yycolumn, "\\0'" ); }
+	"\\n"\'     { yybegin( YYINITIAL ); return new Symbol( "\\n'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\t"\'     { yybegin( YYINITIAL ); return new Symbol( "\\t'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\v"\'     { yybegin( YYINITIAL ); return new Symbol( "\\v'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\b"\'     { yybegin( YYINITIAL ); return new Symbol( "\\b'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\r"\'     { yybegin( YYINITIAL ); return new Symbol( "\\r'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\f"\'     { yybegin( YYINITIAL ); return new Symbol( "\\f'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\a"\'     { yybegin( YYINITIAL ); return new Symbol( "\\a'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn  ); }
+	"\\\\"\'    { yybegin( YYINITIAL ); return new Symbol( "\\\\'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\?"\'     { yybegin( YYINITIAL ); return new Symbol( "\\?'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\'"\'     { yybegin( YYINITIAL ); return new Symbol( "\\''", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\\""\'    { yybegin( YYINITIAL ); return new Symbol( "\\\"'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
+	"\\0"\'     { yybegin( YYINITIAL ); return new Symbol( "\\0'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
 
-	{SingleCharacter}\'     { yybegin( YYINITIAL ); return new Symbol( TokenType.NORMAL_CHARACTER, yyline, yycolumn, yytext() ); }
-
+	{SingleCharacter}\'  { yybegin( YYINITIAL ); return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
 }
 
-<<EOF>>             { return new Symbol( TokenType.EOF, yyline, yycolumn, "EOF" ); }
+<<EOF>>             { return new Symbol("EOF", TokenType.EOF, yyline, yycolumn ); }

@@ -54,8 +54,9 @@ public class App {
 		printStartOfFile(argParser.getJustName(),output);
 
 		MyScanner yylex = new MyScanner( input );
-
-		for ( Symbol current = yylex.next(); !yylex.yyatEOF(); current = yylex.next() ){
+/*
+		Symbol current;
+		for (current = yylex.next(); !yylex.yyatEOF(); current = yylex.next() ){
 			TokenType token = current.tokenType;
 			if ( token == TokenType.ENTER )
 				output.write( "<br>\n" );
@@ -85,6 +86,7 @@ public class App {
 			else
 				output.write( current.content );
 		}
+		*/
 		printEndOfFile(output);
 		yylex.yyclose();
 	}
