@@ -18,6 +18,7 @@
 + [ ] tab characters 
 + [ ] bug on character ending
 
++ [ ] use library for creating html!
 + [ ] write DFA on paper
 + [ ] print with color on terminal
 + [ ] keyword table
