@@ -1,6 +1,6 @@
 # compiler course phase1 project: simple C syntax highligther
 
-## rules: 
+## rules:
 + write syntax highlither in java
 + use jflex for build scanner
 + save output (highligthed) to html output
@@ -9,6 +9,5 @@
 ## how to run
 + this project is based on maven (and of course java)
 + to compile : execute `mvn clean package` on terminal
-+ and to run : `java -jar target/*.jar`
-+ you can also execute `./run.sh`, thats nothing new, just run two above commands!
-
++ and to run : `java -jar target/*.jar someTextFile.cpp`
+ commands!

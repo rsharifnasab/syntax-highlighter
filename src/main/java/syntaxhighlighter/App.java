@@ -6,10 +6,8 @@ public class App {
 	final static String TAB = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
 	public static void main(String[] args) throws IOException {
-
-//		System.out.println( args[0].split("\\.").length );
+		java.io.FileReader input = new ArgumentParser(args).getFileReader();
 		String outputFile = args[0].split("\\.")[0] + ".html";
-//		System.out.println( outputFile );
 
 		Writer fileWriter = new FileWriter( outputFile );
 		fileWriter.write( "<!DOCTYPE html>\n" );
@@ -24,8 +22,7 @@ public class App {
 
 		fileWriter.write( "<p>" );
 
-		FileReader fileReader = new FileReader( args[0] );
-		MyScanner yylex = new MyScanner( fileReader );
+		MyScanner yylex = new MyScanner( input );
 		for ( Symbol current = yylex.next(); current.tokenType != TokenType.EOF; current = yylex.next() ){
 			TokenType token = current.tokenType;
 			if ( token == TokenType.ENTER )
