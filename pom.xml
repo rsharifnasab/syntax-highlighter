@@ -7,7 +7,7 @@
     <artifactId>syntaxhighligther</artifactId>
 
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <name>syntax-highligther</name>
     <url>http://maven.apache.org</url>
@@ -51,7 +51,7 @@
             </plugin>
 
             <plugin>
-                <!-- Build an executable JAR -->
+
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.0</version>
@@ -80,8 +80,7 @@
                 </executions>
             </plugin>
 
-
-
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
