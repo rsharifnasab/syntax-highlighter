@@ -13,7 +13,7 @@ import java.io.*;
 %public // class is public, why? accessible out of package!
 %final // class is final, why anyone should inherit an autogenrated class?
 
-
+%buffer 1000000
 %unicode //input file use the last version of unicode!
 
 %line // line counting: current line can be accesssed with the variable yyline
@@ -50,10 +50,14 @@ DecimalLong = {DecimalInt}[L]
 HexaDecimal = {Sign}[0][xX][0-9a-fA-F]+
 IntegerNumber ={DecimalInt}|{DecimalLong}|{HexaDecimal}
 
-FloatNumber = {Sign}( (\.{Digit}+) | ({Digit}+\.) | ({Digit}+\.{Digit}+) )
-RealNumber = {FloatNumber} | {FloatNumber}[F]
+Ee = (e|E)
+Num = {FloatNumber}|{DecimalInt}
+FloatNumber = {Sign}(\.{Digit}+) | {Sign}({Digit}+\.) |{Sign}({Digit}+\.{Digit}+)
+ScientificFloat = {Num}{Ee}{Sign}{DecimalInt} //todo space
 
-ScientificFloat = ({FloatNumber}|{DecimalInt})[eE]{Sign}{DecimalInt} //todo space
+RealNumber = {FloatNumber} | {FloatNumber}[F] | ScientificFloat
+
+
 
 /* * * *  string and characters * * * * * */
 
@@ -112,11 +116,9 @@ NormalCharacter = "'" {SingleCharacter} "'"
 
 	{Identifier}             { return new Symbol( yytext(), TokenType.IDENTIFIER, yyline, yycolumn); }
 
-	{IntegerNumber} { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	{IntegerNumber} { return new Symbol( yytext(), TokenType.INTEGER_NUMBER, yyline, yycolumn ); }
 
-	{RealNumber}      { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
-
-	{ScientificFloat}    { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
+	{RealNumber}      { return new Symbol( yytext(), TokenType.REAL_NUMBER, yyline, yycolumn ); }
 
 	{Comment}          { return new Symbol( yytext(), TokenType.COMMENT, yyline, yycolumn ); }
 
@@ -140,8 +142,6 @@ NormalCharacter = "'" {SingleCharacter} "'"
 <STRING> {
 
 	"\""          { yybegin( YYINITIAL ); return new Symbol(  yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
-
-	//	{StringCharacter}+      { return new Symbol( TokenType.STRING, yyline, yycolumn, yytext() );  }
 
 	"\\n"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
 	"\\t"       { return new Symbol( yytext(), TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
@@ -181,4 +181,6 @@ NormalCharacter = "'" {SingleCharacter} "'"
 
 }
 
-<<EOF>>             { return new Symbol("EOF", TokenType.EOF, yyline, yycolumn ); }
+<<EOF>>           { return new Symbol("EOF", TokenType.EOF, yyline, yycolumn ); }
+
+[^]   { return new Symbol( yytext(), TokenType.NOTHING, yyline, yycolumn ); }

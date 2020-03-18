@@ -55,39 +55,69 @@ public class App {
 
 		MyScanner yylex = new MyScanner( input );
     
-/*
+
 		Symbol current;
 		for (current = yylex.next(); !yylex.yyatEOF(); current = yylex.next() ){
 			TokenType token = current.tokenType;
-			if ( token == TokenType.ENTER )
-				output.write( "<br>\n" );
-			else if ( token == TokenType.TAB )
-			//	output.write( TAB );
-				output.write( "<span class=\"indent\"></span>" );
-			else if ( token == TokenType.LESSTHAN )
-				output.write( "&lt;" );
-			else if ( token == TokenType.MORETHAN )
-				output.write( "&gt;" );
-			else if ( token == TokenType.IDENTIFIER )
-				output.write( "<span style=\"color:orange\">" + current.content + "</span>" );
-			else if ( token == TokenType.INTEGERLITERAL )
-				output.write( "<span style=\"color:violet\">" + current.content + "</span>" );
-			else if ( token == TokenType.STRING )
-				output.write("<span style=\"color:red\">" + current.content + "</span>");
-			else if ( token == TokenType.SPECIAL_CHARACTER )
-				output.write( "<span style=\"color:green\"><i>" + current.content + "</i></span>" );
-			else if ( token == TokenType.COMMENT )
-				output.write( "<span style=\"color:gray\">" + commentToHTMLString( current.content ) + "</span>" );
-			else if ( token == TokenType.NORMAL_CHARACTER )
-				output.write("<span style=\"color:green\">" + current.content + "</span>");
-			else if ( token == TokenType.FLOATLITERAL )
-				output.write("<span style=\"color:violet\"><i>" + current.content + "</i></span>");
-			else if ( token != TokenType.NOTHING )
-				output.write( "<span style=\"color:blue\"><b>" + current.content + "</b></span>" );
-			else
-				output.write( current.content );
-		}
-		*/
+			switch(token){
+                        
+                case RESERVED_WORD:
+                    output.write( "<span style=\"color:blue\"><b>" + current.content + "</b></span>" );
+                    break;
+            
+                case IDENTIFIER:
+                    output.write( "<span style=\"color:violet\">" + current.content + "</span>" );
+                    break;
+                
+                case INTEGER_NUMBER:
+                    output.write("<span style=\"color:orange\">" + current.content + "</span>");
+                    break;
+                
+                case REAL_NUMBER:
+                    output.write("<span style=\"color:orange\"><i>" + current.content + "</i></span>");
+                    break;
+                
+       
+                case STRING_AND_CHARACTER:
+                    output.write("<span style=\"color:green\">" + current.content + "</span>");
+                    break;
+                    
+                case SPECIAL_CHARACTER:
+                	output.write( "<span style=\"color:green\"><i>" + current.content + "</i></span>" );
+                	break;
+                
+                case COMMENT :
+                    output.write( "<span style=\"color:gray\">" + commentToHTMLString( current.content ) + "</span>" );
+                    break;
+                
+                
+                case NOTHING:
+                case OTHER:
+                    output.write( "<span style=\"color:black\"><b>" + current.content + "</b></span>" );
+          //          output.write( "&lt;" );     //todo
+           //         output.write( "&gt;" );
+                    break;
+                
+                
+                          
+                case ENTER:
+                    output.write( "<br>\n\n" );
+                    break;
+                
+                case TAB:
+        			output.write( "<span class=\"indent\">            </span>" );
+                    break;
+                
+                case EOF:
+                    //TODO
+                    System.out.println("done we reached eof");
+                    break;
+                    
+                default:
+                    throw new RuntimeException("chera inja resid? bad enum?");
+			}
+		}		
+    
 		printEndOfFile(output);
 		yylex.yyclose();
 	}

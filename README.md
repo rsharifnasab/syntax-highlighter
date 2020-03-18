@@ -14,6 +14,10 @@
 
 ### TODO
 + [ ] unit test!
-+ [ ] edit scanner jflex
++ [ ] scientefic notation 
++ [ ] tab characters 
++ [ ] bug on character ending
 
 + [ ] write DFA on paper
++ [ ] print with color on terminal
++ [ ] keyword table
