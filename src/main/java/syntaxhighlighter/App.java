@@ -31,14 +31,14 @@ public class App {
 
       String html = "<html><head><title>Sample Title</title></head>"
          + "<body><p>Sample Content</p></body></html>";
-		 
+
       Document document = Jsoup.parse(html);
       System.out.println(document.title());
       Elements paragraphs = document.getElementsByTag("p");
       for (Element paragraph : paragraphs) {
             System.out.println(paragraph.text());
       }
-  		System.exit(1);
+  
 
 		ArgumentParser argParser = new ArgumentParser(args);
 		FileReader input = argParser.getFileReader();

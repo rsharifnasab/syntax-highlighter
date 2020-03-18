@@ -1,3 +1,4 @@
+/* this part will be added to java files directly! */
 package syntaxhighlighter;
 
 import java.io.*;
@@ -44,13 +45,17 @@ enum TokenType {
 
 }
 
+
+/***** options and macros *****/
 %%
 
-%public
+%public // class is public, why? i is good practice!
+
 %line
 %column
 
 %class MyScanner
+
 %unicode
 
 %type Symbol

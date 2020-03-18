@@ -13,7 +13,7 @@
  commands!
 
 ### TODO
-+ unit test!
-+ edit scanner jflex
++ [ ] unit test!
++ [ ] edit scanner jflex
 
-+ write DFA on paper
++ [ ] write DFA on paper
