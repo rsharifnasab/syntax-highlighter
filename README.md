@@ -12,11 +12,11 @@
 + and to run : `java -jar target/syntaxhighligther-1.0-jar-with-dependencies.jar someTextFile.cpp`
  commands!
  
- ### important note: first time you run maven, it download essential files and it might take a long, dont worry, after first time, it takes less than 5 seconds
+ ### important note: first time you run maven, it download essential files and it might take a long, dont worry, after first time, it takes less than 15 seconds
 
 ### TODO
 + [ ] unit test!
-+ [ ] scientefic notation 
++ [+] scientefic notation 
 + [ ] tab characters 
 + [ ] bug on character ending
 

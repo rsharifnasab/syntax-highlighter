@@ -1,7 +1,11 @@
 int main(){
     
-        
-    
+//        
+/*
+this is a long 
+comment 
+oooo
+*/    
     bool b = (1 && 2) || (1==2) || 1!=2 || 1>=2 || 2<3;
     int a,b; // comma
     int a = [1,2,3,4];

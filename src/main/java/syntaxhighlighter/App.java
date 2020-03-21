@@ -28,7 +28,7 @@ public class App {
 
 	public static void main(String[] args) throws IOException {
 
-
+/*
       String html = "<html><head><title>Sample Title</title></head>"
          + "<body><p>Sample Content</p></body></html>";
 
@@ -38,18 +38,16 @@ public class App {
       for (Element paragraph : paragraphs) {
             System.out.println(paragraph.text());
       }
+      
+      	Document doc = Jsoup.parse("<html></html>");
+		doc.body().addClass("body-styles-cls");
+		doc.body().appendElement("div");
+		System.out.println(doc.toString())
 
-
+*/
 		ArgumentParser argParser = new ArgumentParser(args);
 		FileReader input = argParser.getFileReader();
 		FileWriter output = argParser.getOutFileWriter();
-
-
-		Document doc = Jsoup.parse("<html></html>");
-		doc.body().addClass("body-styles-cls");
-		doc.body().appendElement("div");
-		System.out.println(doc.toString());
-
 
 		printStartOfFile(argParser.getJustName(),output);
 
@@ -58,8 +56,7 @@ public class App {
 
 		Symbol current;
 		for (current = yylex.next(); !yylex.yyatEOF(); current = yylex.next() ){
-			TokenType token = current.tokenType;
-			switch(token){
+			switch(current.tokenType){
                         
                 case RESERVED_WORD:
                     output.write( "<span style=\"color:blue\"><b>" + current.content + "</b></span>" );
@@ -98,14 +95,13 @@ public class App {
            //         output.write( "&gt;" );
                     break;
                 
-                
-                          
+                    
                 case ENTER:
                     output.write( "<br>\n\n" );
                     break;
                 
                 case TAB:
-        			output.write( "<span class=\"indent\">            </span>" );
+        			output.write( "<span>            </span>" );
                     break;
                 
                 case EOF:
@@ -122,17 +118,23 @@ public class App {
 		yylex.yyclose();
 	}
 
-	public static String commentToHTMLString(String s ) throws IOException {
-		String returnValue = "";
-		for ( int i = 0; i < s.length(); i++ ) {
-			if ( s.charAt(i) == '\n' )
-				returnValue = returnValue.concat( "<br>" );
-			else if ( s.charAt(i) == '\t' )
-				returnValue = returnValue.concat( TAB );
-			else
-				returnValue = returnValue.concat( Character.toString( s.charAt( i ) ) );
+	public static String commentToHTMLString(String comment ) {
+		StringBuilder returnValue = new StringBuilder();
+		for(Character c  : comment.toCharArray()){
+            switch(c){
+                case '\n':
+       				returnValue.append( "<br>" );
+                    break;
+                
+                case '\t':
+                    returnValue.append(TAB);
+                    break;
+                    
+                default:
+                    returnValue.append(c);
+            }
 		}
-		return returnValue;
+		return returnValue.toString();
 	}
 
 }
