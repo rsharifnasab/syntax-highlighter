@@ -1,11 +1,11 @@
 int main(){
     
-//        
-/*
-this is a long 
-comment 
-oooo
-*/    
+    //        
+    /*
+    this is a long 
+     comment 
+      oooo
+     */    
     bool b = (1 && 2) || (1==2) || 1!=2 || 1>=2 || 2<3;
     int a,b; // comma
     int a = [1,2,3,4];
@@ -36,7 +36,6 @@ oooo
     const float h12 = .3F;
     auto float h12 = +.3F;
 
-
     // // // // // strings // // / */ 
     string s1 = "salam be to";
     string s2 = "salam be\trouzbeh\nim in next line";
@@ -62,7 +61,14 @@ oooo
     double d2 = +.2;
     double d3 = -10.2;// todo
     
- 	break
+      // / characters 
+     /* */
+    const char c1 = 'a';
+    default char c2 = '\t';
+    static char c2 = '\n';
+  
+
+ 	break and  continue    and    etc
  	record
  	continue
  	new
@@ -76,9 +82,4 @@ oooo
 	return 0;
 }
 
-        // / characters 
-        /* */
-    const char c1 = 'a';
-    default char c2 = '\t';
-    static char c2 = '\n';
-    
+  

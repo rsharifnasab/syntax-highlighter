@@ -6,7 +6,8 @@ import org.jsoup.select.*;
 
 public class App {
 
-	final static String TAB = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	final static String SPACE = "&nbsp;";
+  	final static String TAB =SPACE + SPACE + SPACE;
 
 	private static void printStartOfFile(String title,FileWriter output) throws IOException{
 		output.write( "<!DOCTYPE html>\n" );
@@ -74,7 +75,6 @@ public class App {
                     output.write("<span style=\"color:orange\"><i>" + current.content + "</i></span>");
                     break;
                 
-       
                 case STRING_AND_CHARACTER:
                     output.write("<span style=\"color:green\">" + current.content + "</span>");
                     break;
@@ -84,7 +84,7 @@ public class App {
                 	break;
                 
                 case COMMENT :
-                    output.write( "<span style=\"color:gray\">" + commentToHTMLString( current.content ) + "</span>" );
+                    output.write( "<span style=\"color:gray\">" + commentToHTML( current.content ) + "</span>" );
                     break;
                 
                 
@@ -101,8 +101,13 @@ public class App {
                     break;
                 
                 case TAB:
-        			output.write( "<span>            </span>" );
+        			output.write( TAB );
                     break;
+                
+                case SPACE:
+                    output.write( SPACE );
+                    break;
+                
                 
                 case EOF:
                     //TODO
@@ -118,7 +123,7 @@ public class App {
 		yylex.yyclose();
 	}
 
-	public static String commentToHTMLString(String comment ) {
+	public static String commentToHTML(String comment ) {
 		StringBuilder returnValue = new StringBuilder();
 		for(Character c  : comment.toCharArray()){
             switch(c){
@@ -128,6 +133,10 @@ public class App {
                 
                 case '\t':
                     returnValue.append(TAB);
+                    break;
+               
+                case ' ':
+                    returnValue.append(SPACE);
                     break;
                     
                 default:

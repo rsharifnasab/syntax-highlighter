@@ -13,7 +13,7 @@ import java.io.*;
 %public // class is public, why? accessible out of package!
 %final // class is final, why anyone should inherit an autogenrated class?
 
-%buffer 1000000
+%buffer 100000
 %unicode //input file use the last version of unicode!
 
 %line // line counting: current line can be accesssed with the variable yyline
@@ -23,13 +23,16 @@ import java.io.*;
 %function next // name of function (instead of yylex)
 %type Symbol //define output of out next() function
 
+
 %state STRING
 %state CHARACTER 
+
 
 LineTerminator = \r|\n|\r\n // support linux line ending and windows line ending
 InputCharacter = [^\r\n] // evething except line terminator is input character!
 
-WhiteSpace = {LineTerminator} | [ \t\f] // tab and space and form feeds are WhiteSpace
+WhiteSpace = [ ] 
+Tab = \t
 
 /*   *   *   *   *  *  comments  *   *   *   *    *   *  */
 CStyleComment = "/*"~"*/"
@@ -43,7 +46,7 @@ Underscore = "_"
 Identifier = {Underscore}* {Letter} ({Letter}|{Digit}|{Underscore})*
 
 
-/****** numbers *******/
+/* * * * * *  numbers * * * * * * */
 Sign = (\+|\-)?
 DecimalInt = {Sign}[0-9]+
 DecimalLong = {DecimalInt}[L]
@@ -61,10 +64,9 @@ RealNumber = {FloatNumber} | {FloatNumber}[F] | {ScientificFloat}
 
 /* * * *  string and characters * * * * * */
 
-SingleCharacter = [^\n\r\t\v\b\f\a\?\0\\]
-SingleQ = '\''
-NormalCharacter = {SingleQ}{SingleCharacter}{SingleQ}
-//todo
+ //SingleCharacter = [^\n\r\t\v\b\f\a\?\0\\]
+SingleQ = '
+ //NormalCharacter = {SingleQ}{SingleCharacter}{SingleQ}
 
 
 %%  /* * * * * * * * lexical rules * * * * * ** * * * */
@@ -122,17 +124,16 @@ NormalCharacter = {SingleQ}{SingleCharacter}{SingleQ}
 
 	{Comment}          { return new Symbol( yytext(), TokenType.COMMENT, yyline, yycolumn ); }
 
-	"\t"                        { return new Symbol( yytext(), TokenType.TAB, yyline, yycolumn ); }
+	{Tab}                      { return new Symbol( yytext(), TokenType.TAB, yyline, yycolumn ); }
+	{WhiteSpace}     { return new Symbol( yytext(), TokenType.SPACE, yyline, yycolumn ); }
     
     {LineTerminator}    {return new Symbol( "\n", TokenType.ENTER, yyline, yycolumn ); }
 
     /* jump to another state: String */
 	"\""                      { yybegin( STRING ); return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
-
-	{NormalCharacter}  {return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 	
 	/* jump to another state: character */
-	 "\'"                     { yybegin( CHARACTER ); return new Symbol( "'", TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
+	"\'"                     { yybegin( CHARACTER ); return new Symbol( "'", TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
 	
 	[^]             { return new Symbol( yytext(), TokenType.NOTHING, yyline, yycolumn ); }
@@ -179,10 +180,9 @@ NormalCharacter = {SingleQ}{SingleCharacter}{SingleQ}
 	"\\\""{SingleQ}   { yybegin( YYINITIAL ); return new Symbol( "\\\"'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
 	"\\0"{SingleQ}     { yybegin( YYINITIAL ); return new Symbol( "\\0'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
 
-	{SingleCharacter}{SingleQ}  { yybegin( YYINITIAL ); return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
+	.{SingleQ}  { yybegin( YYINITIAL ); return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
 }
 
-<<EOF>>           { return new Symbol("EOF", TokenType.EOF, yyline, yycolumn ); }
 
 [^]   { return new Symbol( yytext(), TokenType.NOTHING, yyline, yycolumn ); }
