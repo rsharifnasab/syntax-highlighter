@@ -64,6 +64,9 @@ RealNumber = {FloatNumber} | {FloatNumber}[F] | {ScientificFloat}
 
 SingleQ = '
 
+ /* * * * Other * * * */
+ Other = "==" | "." | "!=" | "," |"<=" |":" |"<" |";" |">" |  "[" | "]" |  ">=" | "++" | "=" | "--" | "~" | "-" |"&" |"-=" |"and" |"*=" |"or" |"/=" |"not" |"/" |"|" |"%" |"^" | "begin" | "end" | "*" | "(" | ")" | "+" | "+=" 
+  
 %%  /* * * * * * * * lexical rules * * * * * ** * * * */
 
 <YYINITIAL> {  // state e avvalie ke tush hastim
@@ -108,8 +111,7 @@ SingleQ = '
 	"true"         { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 	"false"        { return new Symbol( yytext(), TokenType.RESERVED_WORD, yyline, yycolumn ); }
 
-	"<"          { return new Symbol( yytext(), TokenType.OTHER, yyline, yycolumn ); }
-	">"          { return new Symbol( yytext(), TokenType.OTHER, yyline, yycolumn ); }
+	{Other}    { return new Symbol( yytext(), TokenType.OTHER, yyline, yycolumn ); }
 
 	{Identifier}             { return new Symbol( yytext(), TokenType.IDENTIFIER, yyline, yycolumn); }
 
