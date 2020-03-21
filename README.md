@@ -11,6 +11,8 @@
 + to compile : execute `mvn clean package` on terminal
 + and to run : `java -jar target/syntaxhighligther-1.0-jar-with-dependencies.jar someTextFile.cpp`
  commands!
+ 
+ ### important note: first time you run maven, it download essential files and it might take a long, dont worry, after first time, it takes less than 5 seconds
 
 ### TODO
 + [ ] unit test!
