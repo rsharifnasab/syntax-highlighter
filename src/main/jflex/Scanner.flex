@@ -4,7 +4,6 @@ package syntaxhighlighter;
 import java.io.*;
 
 
-
 %% /* * * * * options and macros (declerations) * * * * * * * */
 
 
@@ -19,11 +18,11 @@ import java.io.*;
 %line // line counting: current line can be accesssed with the variable yyline
 %column // column counting: same as line!
 
-
+ /* settings of next() function */
 %function next // name of function (instead of yylex)
 %type Symbol //define output of out next() function
 
-
+ /* define states of our machine */
 %state STRING
 %state CHARACTER 
 
@@ -34,7 +33,7 @@ InputCharacter = [^\r\n] // evething except line terminator is input character!
 WhiteSpace = [ ] 
 Tab = \t
 
-/*   *   *   *   *  *  comments  *   *   *   *    *   *  */
+ /*   *   *   *   *  *  comments  *   *   *   *    *   *  */
 CStyleComment = "/*"~"*/"
 OneLineComment = "//" {InputCharacter}* {LineTerminator}
 Comment = {CStyleComment}|{OneLineComment}
@@ -46,7 +45,7 @@ Underscore = "_"
 Identifier = {Underscore}* {Letter} ({Letter}|{Digit}|{Underscore})*
 
 
-/* * * * * *  numbers * * * * * * */
+ /* * * * * *  numbers * * * * * * */
 Sign = (\+|\-)?
 DecimalInt = {Sign}[0-9]+
 DecimalLong = {DecimalInt}[L]
@@ -61,13 +60,9 @@ ScientificFloat = {Num}{Ee}{Sign}{DecimalInt}
 RealNumber = {FloatNumber} | {FloatNumber}[F] | {ScientificFloat}
 
 
+ /* * * *  string and characters * * * * * */
 
-/* * * *  string and characters * * * * * */
-
- //SingleCharacter = [^\n\r\t\v\b\f\a\?\0\\]
 SingleQ = '
- //NormalCharacter = {SingleQ}{SingleCharacter}{SingleQ}
-
 
 %%  /* * * * * * * * lexical rules * * * * * ** * * * */
 
@@ -138,7 +133,6 @@ SingleQ = '
 	
 	[^]             { return new Symbol( yytext(), TokenType.NOTHING, yyline, yycolumn ); }
 
-	//<<EOF>>
 }
 
 /* * * * * * * *  * * * State : S T R I N G * * * * * * * */
@@ -161,10 +155,9 @@ SingleQ = '
 
 	.           { return new Symbol( yytext(), TokenType.STRING_AND_CHARACTER, yyline, yycolumn ); }
 
-
 }
 
-/* * * * * * * *  * * * State : C H A RA C T E R * * * * * * * */
+ /* * * * * * * *  * * * State : C H A RA C T E R * * * * * * * */
 <CHARACTER> {
 
     "\\n"{SingleQ}     { yybegin( YYINITIAL ); return new Symbol( "\\n'", TokenType.SPECIAL_CHARACTER, yyline, yycolumn ); }
