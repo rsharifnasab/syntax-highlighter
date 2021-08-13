@@ -1,19 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>syntaxhighlighter</groupId>
     <artifactId>syntaxhighligther</artifactId>
-
     <packaging>jar</packaging>
     <version>1.0</version>
-
     <name>syntax-highligther</name>
     <url>http://maven.apache.org</url>
-
     <dependencies>
-
         <dependency>
             <!-- junit for unit testing -->
             <groupId>junit</groupId>
@@ -21,26 +14,21 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <!-- main library for creating scanner! -->
             <groupId>de.jflex</groupId>
             <artifactId>jflex</artifactId>
             <version>1.8.1</version>
         </dependency>
-
         <dependency>
             <!-- jsoup HTML parser library -->
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.13.1</version>
         </dependency>
-
     </dependencies>
-
     <build>
         <plugins>
-
             <plugin>
                 <!-- set compiler version -->
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -49,9 +37,7 @@
                     <release>13</release>
                 </configuration>
             </plugin>
-
             <plugin>
-
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.0</version>
@@ -65,7 +51,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
             <plugin>
                 <!-- autogenrate scanner from flex file -->
                 <groupId>de.jflex</groupId>
@@ -79,8 +64,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -105,20 +88,12 @@
                     </execution>
                 </executions>
             </plugin>
-
-
-
         </plugins>
     </build>
-
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
-
-
-
 <!--
 <build>
 <plugins>
