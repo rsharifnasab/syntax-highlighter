@@ -1,24 +1,21 @@
-# compiler course phase1 project: simple C syntax highligther
+# compiler course Phase-1 project: simple C syntax highlighter
 
 ## Rules
-+ Write syntax highlither in java
-+ use Jflex for scanner
-+ Save result (highligthed) to html file
-+ More info about color and etc in todo.pdf
++ Write syntax highlighter in java
++ Use `Jflex` for scanner
++ Save the highlighted result to HTML file
++ More info about color and etc in `todo.pdf`
 
 ## How to run
-+ You should install maven and java first.
-+ To compile: execute `mvn clean package`
-+ To run: `java -jar target/syntaxhighligther-1.0-jar-with-dependencies.jar someTextFile.cpp`
- commands!
- 
++ Install maven and java first
++ Compile command: `mvn clean package`
++ Run command: `java -jar target/syntaxhighligther-1.0-jar-with-dependencies.jar someTextFile.cpp`
 
-### TODO
-- [ ] unit test!
-- [x] scientefic notation 
-- [x] tab characters 
-- [x] bug on character ending
-- [ ] use library for creating html!
-- [ ] write DFA on paper
-- [ ] print with color on terminal with ascii code
+
+## TODO
+- [ ] Unit test!
+- [x] Support scientific notation
+- [x] Fix tab character's problem
+- [ ] Use a library for creating HTML!
+- [ ] Print the result with ansicolors on terminal
 
